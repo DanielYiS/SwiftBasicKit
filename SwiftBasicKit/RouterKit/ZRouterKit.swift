@@ -90,6 +90,14 @@ public struct ZRouterKit {
                 fromVC?.present(toVC, animated: animated , completion: completion)
                 return
             }
+            if let vc = ZCurrentVC.shared.currentPresentVC {
+                vc.present(toVC, animated: animated , completion: completion)
+                return
+            }
+            if let vc = ZCurrentVC.shared.currentVC {
+                vc.present(toVC, animated: animated , completion: completion)
+                return
+            }
             let topViewController = ZRouterRoot.currentTopViewController()
             topViewController?.present(toVC, animated: animated , completion: completion)
         }
@@ -99,14 +107,18 @@ public struct ZRouterKit {
             fromVC?.present(toVC, animated: animated , completion: completion)
             return
         }
+        if let vc = ZCurrentVC.shared.currentPresentVC {
+            vc.present(toVC, animated: animated , completion: completion)
+            return
+        }
+        if let vc = ZCurrentVC.shared.currentVC {
+            vc.present(toVC, animated: animated , completion: completion)
+            return
+        }
         let topViewController = ZRouterRoot.currentTopViewController()
         topViewController?.present(toVC, animated: animated , completion: completion)
     }
     public static func dismiss(fromVC: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) {
-        if fromVC.presentingViewController != nil {
-            fromVC.presentingViewController?.dismiss(animated: animated, completion: completion)
-            return
-        }
         fromVC.dismiss(animated: animated, completion: completion)
     }
 }
