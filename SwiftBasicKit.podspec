@@ -5,9 +5,12 @@
 # Any lines starting with a # are optional, but their use is encouraged
 # To learn more about a Podspec see https://guides.cocoapods.org/syntax/podspec.html
 #
-# pod repo add SwiftBasicKit  https://github.com/cdzhangshuangyu/SwiftBasicKit.git
-# pod repo push SwiftBasicKit SwiftBasicKit.podspec --sources='https://github.com/CocoaPods/Specs.git'
-# pod trunk push SwiftBasicKit.podspec --allow-warnings
+# 1. new code update github
+# 2. local not code : pod repo add SwiftBasicKit  https://github.com/cdzhangshuangyu/SwiftBasicKit.git
+#    local uodate code: pod repo update SwiftBasicKit  https://github.com/cdzhangshuangyu/SwiftBasicKit.git
+# 3. pod repo push SwiftBasicKit SwiftBasicKit.podspec --sources='https://github.com/CocoaPods/Specs.git'
+# 4. pod trunk push SwiftBasicKit.podspec --allow-warnings
+# 5. pod install or pod update in use project
 
 Pod::Spec.new do |s|
   s.name             = 'SwiftBasicKit'
