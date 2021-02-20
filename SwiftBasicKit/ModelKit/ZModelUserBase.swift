@@ -37,7 +37,7 @@ public class ZModelUserBase: ZModelBase {
     }
     public required init<T: ZModelBase>(instance: T) {
         super.init(instance: instance)
-        guard let model = instance as? Self else {
+        guard let model = instance as? ZModelUserBase else {
             return
         }
         self.token = model.token

@@ -29,7 +29,7 @@ public class ZModelMessage: ZModelBase {
     }
     public required init<T: ZModelBase>(instance: T) {
         super.init(instance: instance)
-        guard let model = instance as? Self else {
+        guard let model = instance as? ZModelMessage else {
             return
         }
         if let user = model.message_user {
