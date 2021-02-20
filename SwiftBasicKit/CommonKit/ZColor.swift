@@ -15,7 +15,6 @@ public struct ZColor {
     /// 导航栏文本颜色
     public var NavBarTitleColor: UIColor = UIColor.init(hex: "#1E1E27")
     
-    
     /// Tabbar背景颜色
     public var TabBarTintColor: UIColor = UIColor.init(hex: "#FFFFFF")
     /// Tabbar分割线

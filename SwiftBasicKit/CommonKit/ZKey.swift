@@ -4,7 +4,7 @@ import UIKit
 /// 全局配置主键
 public struct ZKey {
     
-    private static var shared = ZKey.init()
+    public static var shared = ZKey.init()
     
     private var productIds: [String] = [String]()
     
@@ -12,26 +12,34 @@ public struct ZKey {
     private var web = ""
     private var wss = ""
     
+    /// 苹果appid - 用于跳转苹果应用
     private var appleId = ""
+    /// 服务器Appid
     private var serviceAppId = ""
+    /// IM消息平台
     private var messageAppId = ""
+    /// 推送平台
     private var pushAppId = ""
+    /// bug收集平台
     private var bugAppId = ""
+    /// 统计平台
     private var countAppId = ""
+    
+    /// 关于我们
+    public var aboutMe = ""
+    /// 团队服务
+    public var teamService = ""
+    /// 免责申明
+    public var disclaimer = ""
+    /// 使用协议
+    public var useAgreement = ""
+    /// 支付协议
+    public var payAgreement = ""
 }
 extension ZKey {
-    public struct Common {
-        /// CellId
-        public static let kCellId = "kCellId"
-        /// CellHeader
-        public static let kCellHeaderId = "kCellHeaderId"
-        /// CellFooter
-        public static let kCellFooterId = "kCellFooterId"
-        
-    }
-}
-extension ZKey {
+    /// 自定义限制
     public static let number = Number.init()
+    /// 自定义限制
     public struct Number {
         /// 键盘最小高度
         public let keyboardHeight: CGFloat = 180
@@ -104,7 +112,9 @@ extension ZKey {
     }
 }
 extension ZKey {
+    /// 时间格式化
     public static let timeFormat = TimeFormat.init()
+    /// 时间格式化
     public struct TimeFormat {
         /// MM/dd/yyyy HH:mm
         public let yyyyMMddHHmm: String = "MM/dd/yyyy HH:mm"
@@ -119,23 +129,27 @@ extension ZKey {
     }
 }
 extension ZKey {
+    /// 第三方产品ID
     public static let appId = AppId.init()
+    /// 第三方产品ID
     public struct AppId {
-        public var appleId      = ZKey.shared.appleId
-        public var serviceAppId = ZKey.shared.serviceAppId
-        public var messageAppId = ZKey.shared.messageAppId
-        public var pushAppId    = ZKey.shared.pushAppId
-        public var bugAppId     = ZKey.shared.bugAppId
-        public var countAppId   = ZKey.shared.countAppId
+        public let appleId      = ZKey.shared.appleId
+        public let serviceAppId = ZKey.shared.serviceAppId
+        public let messageAppId = ZKey.shared.messageAppId
+        public let pushAppId    = ZKey.shared.pushAppId
+        public let bugAppId     = ZKey.shared.bugAppId
+        public let countAppId   = ZKey.shared.countAppId
     }
     /// 配置AppId
-    /// appleId 苹果应用ID
-    /// serviceAppId 服务器
-    /// messageAppId 聊天消息
-    /// pushAppId 推送平台
-    /// bugAppId Bug收集平台
-    /// countAppId 统计平台
-    public func configService(appleId: String, serviceAppId: String, messageAppId: String, pushAppId: String, bugAppId: String, countAppId: String) {
+    /// - parameter appleId: 苹果应用ID
+    /// - parameter serviceAppId :服务器应用ID
+    /// - parameter messageAppId: 聊天消息应用ID
+    /// - parameter pushAppId: 推送平台应用ID
+    /// - parameter bugAppId: Bug收集平台应用ID
+    /// - parameter countAppId: 统计平台应用ID
+    /// - returns: null
+    /// - throws: null
+    public func configAppId(appleId: String, serviceAppId: String, messageAppId: String, pushAppId: String, bugAppId: String, countAppId: String) {
         ZKey.shared.appleId = appleId
         ZKey.shared.serviceAppId = serviceAppId
         ZKey.shared.messageAppId = messageAppId
@@ -145,12 +159,18 @@ extension ZKey {
     }
 }
 extension ZKey {
+    /// 服务器地址
     public static let service = Service.init()
+    /// 服务器地址
     public struct Service {
-        public var api = ZKey.shared.api
-        public var web = ZKey.shared.web
-        public var wss = ZKey.shared.wss
+        public let api = ZKey.shared.api
+        public let web = ZKey.shared.web
+        public let wss = ZKey.shared.wss
     }
+    /// 配置服务器地址
+    /// - parameter api: 接口跟地址
+    /// - parameter web: 网页跟地址
+    /// - parameter wss: IM连接地址
     public func configService(api: String, web: String, wss: String) {
         ZKey.shared.api = api
         ZKey.shared.web = web
@@ -158,51 +178,17 @@ extension ZKey {
     }
 }
 extension ZKey {
-    public static let webLink = WebLink.init()
-    public struct WebLink {
-        /// 关于我们
-        public let aboutMe = ZKey.shared.web + "aboutme.hmtl"
-        /// 团队服务
-        public let teamService = ZKey.shared.web + "teamservice.hmtl"
-        /// 免责申明
-        public let disclaimer = ZKey.shared.web + "disclaimer.html"
-        /// 使用协议
-        public let useAgreement = ZKey.shared.web + "useagree.html"
-        /// 支付协议
-        public let payAgreement = ZKey.shared.web + "payagree.html"
-    }
-}
-extension ZKey {
+    /// 苹果内购
     public static let applePay = ApplePay.init()
+    /// 苹果内购
     public struct ApplePay {
-        public var productId_0: String {
-            return ZKey.shared.productIds.count > 0 ? ZKey.shared.productIds[0] : ""
-        }
-        public var productId_1: String {
-            return ZKey.shared.productIds.count > 1 ? ZKey.shared.productIds[1] : ""
-        }
-        public var productId_2: String {
-            return ZKey.shared.productIds.count > 2 ? ZKey.shared.productIds[2] : ""
-        }
-        public var productId_3: String {
-            return ZKey.shared.productIds.count > 3 ? ZKey.shared.productIds[3] : ""
-        }
-        public var productId_4: String {
-            return ZKey.shared.productIds.count > 4 ? ZKey.shared.productIds[4] : ""
-        }
-        public var productId_5: String {
-            return ZKey.shared.productIds.count > 5 ? ZKey.shared.productIds[5] : ""
-        }
-        public var productId_6: String {
-            return ZKey.shared.productIds.count > 6 ? ZKey.shared.productIds[6] : ""
-        }
-        public var productId_7: String {
-            return ZKey.shared.productIds.count > 7 ? ZKey.shared.productIds[7] : ""
-        }
-        public var productId_8: String {
-            return ZKey.shared.productIds.count > 8 ? ZKey.shared.productIds[8] : ""
+        /// 检查是否存在内购项
+        public func checkExistProductId(id: String) -> Bool {
+            return ZKey.shared.productIds.contains(id)
         }
     }
+    /// 配置内购ID集合
+    /// - parameter ids: 内购ID集合
     public func configProductIds(ids: [String]) {
         ZKey.shared.productIds.removeAll()
         ZKey.shared.productIds.append(contentsOf: ids)
