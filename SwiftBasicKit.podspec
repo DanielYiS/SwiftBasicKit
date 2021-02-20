@@ -10,11 +10,11 @@
 #    local uodate code: cd ~/.cocoapods/repos/SwiftBasicKit. Then execute: pod repo update SwiftBasicKit
 # 3. pod repo push SwiftBasicKit SwiftBasicKit.podspec --sources='https://github.com/CocoaPods/Specs.git'
 # 4. pod trunk push SwiftBasicKit.podspec --allow-warnings
-# 5. pod install or pod update in use project
+# 5. pod install or pod update on you project execute
 
 Pod::Spec.new do |s|
   s.name             = 'SwiftBasicKit'
-  s.version          = '0.0.7'
+  s.version          = '0.0.8'
   s.summary          = 'SwiftBasicKit'
   s.module_name      = 'SwiftBasicKit'
 
@@ -33,11 +33,11 @@ Pod::Spec.new do |s|
   s.source_files  = 'SwiftBasicKit/**/*.{swift,h,m}'
   s.resources     = ['SwiftBasicKit/**/*.strings']
   
-  s.dependency 'Moya'       , '~> 13.0.1'
-  s.dependency 'Result'     , '~> 4.1.0'
-  s.dependency 'Alamofire'  , '~> 4.9.1'
-  s.dependency 'HandyJSON'  , '~> 5.0.2'
-  s.dependency 'BFKit-Swift', '~> 6.0.1'
-  s.dependency 'CryptoSwift', '~> 1.3.8'
-  s.dependency 'GRDB.swift' , '~> 4.14.0'
+  s.dependency 'Moya'
+  s.dependency 'Result'
+  s.dependency 'Alamofire'
+  s.dependency 'HandyJSON'
+  s.dependency 'BFKit-Swift'
+  s.dependency 'CryptoSwift'
+  s.dependency 'GRDB.swift'
 end

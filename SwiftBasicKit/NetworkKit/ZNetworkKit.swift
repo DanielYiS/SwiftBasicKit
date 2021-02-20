@@ -16,13 +16,13 @@ public struct ZNetworkKit {
         return ZNetworkKit()
     }
     /// 网络请求对象
-    private func defaultAlamofire() -> Alamofire.SessionManager {
+    private func defaultAlamofire() -> Alamofire.Session {
         let configuration = URLSessionConfiguration.default
         configuration.timeoutIntervalForRequest = 15
         configuration.httpAdditionalHeaders = ZRequestHeaders()
         
-        let manager = Alamofire.SessionManager.init(configuration: configuration)
-        return manager
+        let session = Alamofire.Session.init(configuration: configuration)
+        return session
     }
     /// NetworkActivityPlugin插件用来监听网络请求
     private let networkPlugin = NetworkActivityPlugin.init { (changeType, targetType) in
@@ -46,7 +46,7 @@ public struct ZNetworkKit {
         let headers = target.headers ?? [:]
         let parameters = target.parameters ?? [:]
         let path = target.path
-        let provider = MoyaProvider<ZNetworkTargetType>.init(manager: self.defaultAlamofire(), plugins: [self.networkPlugin, self.typePlugin], trackInflights: false)
+        let provider = MoyaProvider<ZNetworkTargetType>.init(session: self.defaultAlamofire(), plugins: [self.networkPlugin, self.typePlugin], trackInflights: false)
         let task = provider.request(target, progress: nil, completion: { (result) in
             switch result {
             case .success(let response):

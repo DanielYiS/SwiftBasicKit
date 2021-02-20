@@ -13,69 +13,60 @@ public struct SQLLiteral {
     /// SQLLiteral is an array of elements which can be qualified with
     /// table aliases.
     enum Element {
-        case sql(String, StatementArguments)
+        // Can't be qualified with a table alias
+        case sql(String, StatementArguments = StatementArguments())
+        // Does not need to be qualified with a table alias
+        case subquery(SQLSubquery)
+        // Cases below can be qualified with a table alias
         case expression(SQLExpression)
-        case selectable(SQLSelectable)
-        case orderingTerm(SQLOrderingTerm)
-        case subQuery(SQLLiteral)
-        // TODO: remove when the deprecated SQLLiteral.mapSQL(_:) is removed.
-        case map(SQLLiteral, (String) -> String)
+        case selection(SQLSelection)
+        case ordering(SQLOrdering)
         
-        // TODO: remove and use default case argument when compiler >= 5.1
-        static func sql(_ sql: String) -> Element {
-            return .sql(sql, StatementArguments())
+        var isEmpty: Bool {
+            switch self {
+            case let .sql(sql, _):
+                return sql.isEmpty
+            default:
+                return false
+            }
         }
         
-        fileprivate func sql(_ context: inout SQLGenerationContext) -> String {
+        fileprivate func sql(_ context: SQLGenerationContext) throws -> String {
             switch self {
             case let .sql(sql, arguments):
                 if context.append(arguments: arguments) == false {
-                    // GRDB limitation: we don't know how to look for `?` in sql and
+                    // We don't know how to look for `?` in sql and
                     // replace them with literals.
-                    fatalError("Not implemented")
+                    fatalError("Not implemented: turning an SQL parameter into an SQL literal value")
                 }
                 return sql
+            case let .subquery(subquery):
+                return try subquery.sql(context)
             case let .expression(expression):
-                return expression.expressionSQL(&context, wrappedInParenthesis: false)
-            case let .selectable(selectable):
-                return selectable.resultColumnSQL(&context)
-            case let .orderingTerm(orderingTerm):
-                return orderingTerm.orderingTermSQL(&context)
-            case let .subQuery(sqlLiteral):
-                return "(" + sqlLiteral.sql(&context) + ")"
-            case let .map(sqlLiteral, transform):
-                return transform(sqlLiteral.sql(&context))
+                return try expression.sql(context)
+            case let .selection(selection):
+                return try selection.sql(context)
+            case let .ordering(ordering):
+                return try ordering.sql(context)
             }
         }
         
         fileprivate func qualified(with alias: TableAlias) -> Element {
             switch self {
             case .sql:
+                // Can't qualify raw SQL string
+                return self
+            case .subquery:
+                // Subqueries don't need table alias
                 return self
             case let .expression(expression):
-                return .expression(expression.qualifiedExpression(with: alias))
-            case let .selectable(selectable):
-                return .selectable(selectable.qualifiedSelectable(with: alias))
-            case let .orderingTerm(orderingTerm):
-                return .orderingTerm(orderingTerm.qualifiedOrdering(with: alias))
-            case .subQuery:
-                // subqueries are not requalified
-                return self
-            case let .map(sqlLiteral, transform):
-                return .map(sqlLiteral.qualified(with: alias), transform)
+                return .expression(expression.qualified(with: alias))
+            case let .selection(selection):
+                return .selection(selection.qualified(with: alias))
+            case let .ordering(ordering):
+                return .ordering(ordering.qualified(with: alias))
             }
         }
-    }
-    
-    public var sql: String {
-        var context = SQLGenerationContext.sqlLiteralContext
-        return sql(&context)
-    }
-    
-    public var arguments: StatementArguments {
-        var context = SQLGenerationContext.sqlLiteralContext
-        _ = sql(&context)
-        return context.arguments
     }
     
     private(set) var elements: [Element]
@@ -104,22 +95,32 @@ public struct SQLLiteral {
     ///     let emailLiteral = [columnLiteral, suffixLiteral].joined(separator: " || ")
     ///     let request = User.select(emailLiteral.sqlExpression)
     ///     let emails = try String.fetchAll(db, request)
-    public init(_ expression: SQLExpression) {
-        self.init(elements: [.expression(expression)])
+    public init(_ expression: SQLSpecificExpressible) {
+        self.init(elements: [.expression(expression.sqlExpression)])
     }
     
-    // TODO: deprecate when SQL interpolation is always available
-    /// Returns a literal whose SQL is transformed by the given closure.
-    public func mapSQL(_ transform: @escaping (String) -> String) -> SQLLiteral {
-        return SQLLiteral(elements: [.map(self, transform)])
+    /// Returns true if this literal generates an empty SQL string
+    public var isEmpty: Bool {
+        elements.allSatisfy(\.isEmpty)
     }
     
-    func sql(_ context: inout SQLGenerationContext) -> String {
-        return elements.map { $0.sql(&context) }.joined()
+    /// Turn a SQLLiteral into raw SQL and arguments.
+    ///
+    /// - parameter db: A database connection.
+    /// - returns: A tuple made of a raw SQL string, and statement arguments.
+    public func build(_ db: Database) throws -> (sql: String, arguments: StatementArguments) {
+        let context = SQLGenerationContext(db)
+        let sql = try self.sql(context)
+        return (sql: sql, arguments: context.arguments)
     }
     
-    fileprivate func qualified(with alias: TableAlias) -> SQLLiteral {
-        return SQLLiteral(elements: elements.map { $0.qualified(with: alias) })
+    /// Returns the literal SQL string given an SQL generation context.
+    func sql(_ context: SQLGenerationContext) throws -> String {
+        try elements.map { try $0.sql(context) }.joined()
+    }
+    
+    func qualified(with alias: TableAlias) -> SQLLiteral {
+        SQLLiteral(elements: elements.map { $0.qualified(with: alias) })
     }
 }
 
@@ -165,21 +166,21 @@ extension SQLLiteral {
 }
 
 extension SQLLiteral {
-    /// Creates an SQL literal expression.
+    /// Creates a literal SQL expression.
     ///
     ///     SQLLiteral(sql: "1 + 2").sqlExpression
     ///     SQLLiteral(sql: "? + ?", arguments: [1, 2]).sqlExpression
     ///     SQLLiteral(sql: ":one + :two", arguments: ["one": 1, "two": 2]).sqlExpression
     public var sqlExpression: SQLExpression {
-        return SQLExpressionLiteral(sqlLiteral: self)
+        .literal(self)
     }
     
-    var sqlSelectable: SQLSelectable {
-        return SQLSelectionLiteral(sqlLiteral: self)
+    var sqlSelection: SQLSelection {
+        .literal(self)
     }
     
-    var sqlOrderingTerm: SQLOrderingTerm {
-        return SQLOrderingLiteral(sqlLiteral: self)
+    var sqlOrdering: SQLOrdering {
+        .literal(self)
     }
 }
 
@@ -195,9 +196,9 @@ extension Sequence where Element == SQLLiteral {
     ///     let query = components.joined(separator: " ")
     public func joined(separator: String = "") -> SQLLiteral {
         if separator.isEmpty {
-            return SQLLiteral(elements: flatMap { $0.elements })
+            return SQLLiteral(elements: flatMap(\.elements))
         } else {
-            return SQLLiteral(elements: Array(map { $0.elements }.joined(separator: CollectionOfOne(.sql(separator)))))
+            return SQLLiteral(elements: Array(map(\.elements).joined(separator: CollectionOfOne(.sql(separator)))))
         }
     }
 }
@@ -214,16 +215,15 @@ extension Collection where Element == SQLLiteral {
     ///     let query = components.joined(separator: " ")
     public func joined(separator: String = "") -> SQLLiteral {
         if separator.isEmpty {
-            return SQLLiteral(elements: flatMap { $0.elements })
+            return SQLLiteral(elements: flatMap(\.elements))
         } else {
-            return SQLLiteral(elements: Array(map { $0.elements }.joined(separator: CollectionOfOne(.sql(separator)))))
+            return SQLLiteral(elements: Array(map(\.elements).joined(separator: CollectionOfOne(.sql(separator)))))
         }
     }
 }
 
 // MARK: - ExpressibleByStringInterpolation
 
-#if swift(>=5.0)
 extension SQLLiteral: ExpressibleByStringInterpolation {
     /// :nodoc
     public init(unicodeScalarLiteral: String) {
@@ -243,141 +243,5 @@ extension SQLLiteral: ExpressibleByStringInterpolation {
     /// :nodoc:
     public init(stringInterpolation sqlInterpolation: SQLInterpolation) {
         self.init(elements: sqlInterpolation.elements)
-    }
-}
-#endif
-
-// MARK: - SQLExpressionLiteral
-
-/// [**Experimental**](http://github.com/groue/GRDB.swift#what-are-experimental-features)
-///
-/// SQLExpressionLiteral is an expression built from a raw SQL snippet.
-///
-///     SQLExpressionLiteral(sql: "1 + 2")
-///
-/// The SQL literal may contain `?` and colon-prefixed arguments:
-///
-///     SQLExpressionLiteral(sql: "? + ?", arguments: [1, 2])
-///     SQLExpressionLiteral(sql: ":one + :two", arguments: ["one": 1, "two": 2])
-public struct SQLExpressionLiteral: SQLExpression {
-    private let sqlLiteral: SQLLiteral
-    
-    public var sql: String { return sqlLiteral.sql }
-    
-    public var arguments: StatementArguments { return sqlLiteral.arguments }
-    
-    // Prefer SQLLiteral.sqlExpression
-    fileprivate init(sqlLiteral: SQLLiteral) {
-        self.sqlLiteral = sqlLiteral
-    }
-    
-    /// [**Experimental**](http://github.com/groue/GRDB.swift#what-are-experimental-features)
-    ///
-    /// Creates an SQL literal expression.
-    ///
-    ///     SQLExpressionLiteral(sql: "1 + 2")
-    ///     SQLExpressionLiteral(sql: "? + ?", arguments: [1, 2])
-    ///     SQLExpressionLiteral(sql: ":one + :two", arguments: ["one": 1, "two": 2])
-    @available(*, deprecated, message: "Use SQLiteral.sqlExpression instead")
-    public init(sql: String, arguments: StatementArguments = StatementArguments()) {
-        self.init(sqlLiteral: SQLLiteral(sql: sql, arguments: arguments))
-    }
-    
-    /// [**Experimental**](http://github.com/groue/GRDB.swift#what-are-experimental-features)
-    ///
-    /// Creates an SQL literal expression.
-    ///
-    ///     SQLExpressionLiteral(literal: SQLLiteral(sql: "1 + 2")
-    ///     SQLExpressionLiteral(literal: SQLLiteral(sql: "? + ?", arguments: [1, 2]))
-    ///     SQLExpressionLiteral(literal: SQLLiteral(sql: ":one + :two", arguments: ["one": 1, "two": 2]))
-    ///
-    /// With Swift 5, you can safely embed raw values in your SQL queries,
-    /// without any risk of syntax errors or SQL injection:
-    ///
-    ///     SQLExpressionLiteral(literal: "\(1) + \(2)")
-    @available(*, deprecated, message: "Use SQLiteral.sqlExpression instead")
-    public init(literal sqlLiteral: SQLLiteral) {
-        self.init(sqlLiteral: sqlLiteral)
-    }
-    
-    /// [**Experimental**](http://github.com/groue/GRDB.swift#what-are-experimental-features)
-    /// :nodoc:
-    public func expressionSQL(_ context: inout SQLGenerationContext, wrappedInParenthesis: Bool) -> String {
-        if wrappedInParenthesis {
-            return "(\(expressionSQL(&context, wrappedInParenthesis: false)))"
-        }
-        return sqlLiteral.sql(&context)
-    }
-    
-    /// [**Experimental**](http://github.com/groue/GRDB.swift#what-are-experimental-features)
-    /// :nodoc:
-    public func qualifiedExpression(with alias: TableAlias) -> SQLExpression {
-        return sqlLiteral.qualified(with: alias).sqlExpression
-    }
-}
-
-// MARK: - SQLSelectionLiteral
-
-private struct SQLSelectionLiteral: SQLSelectable {
-    private let sqlLiteral: SQLLiteral
-    
-    // Prefer SQLLiteral.sqlSelectable
-    fileprivate init(sqlLiteral: SQLLiteral) {
-        self.sqlLiteral = sqlLiteral
-    }
-    
-    func resultColumnSQL(_ context: inout SQLGenerationContext) -> String {
-        return sqlLiteral.sql(&context)
-    }
-    
-    func countedSQL(_ context: inout SQLGenerationContext) -> String {
-        fatalError("""
-            Selection literals can't be counted. \
-            To resolve this error, select one or several SQLExpressionLiteral instead.
-            """)
-    }
-    
-    func count(distinct: Bool) -> SQLCount? {
-        fatalError("""
-            Selection literals can't be counted. \
-            To resolve this error, select one or several SQLExpressionLiteral instead.
-            """)
-    }
-    
-    func columnCount(_ db: Database) throws -> Int {
-        fatalError("""
-            Selection literals don't known how many columns they contain. \
-            To resolve this error, select one or several SQLExpressionLiteral instead.
-            """)
-    }
-    
-    func qualifiedSelectable(with alias: TableAlias) -> SQLSelectable {
-        return sqlLiteral.qualified(with: alias).sqlSelectable
-    }
-}
-
-// MARK: - SQLOrderingLiteral
-
-private struct SQLOrderingLiteral: SQLOrderingTerm {
-    private let sqlLiteral: SQLLiteral
-    
-    // Prefer SQLLiteral.sqlOrderingTerm
-    fileprivate init(sqlLiteral: SQLLiteral) {
-        self.sqlLiteral = sqlLiteral
-    }
-    
-    var reversed: SQLOrderingTerm {
-        fatalError("""
-            Ordering literals can't be reversed. \
-            To resolve this error, order by expression literals instead.
-            """)
-    }
-    
-    func orderingTermSQL(_ context: inout SQLGenerationContext) -> String {
-        return sqlLiteral.sql(&context)
-    }
-    
-    func qualifiedOrdering(with alias: TableAlias) -> SQLOrderingTerm {
-        return sqlLiteral.qualified(with: alias).sqlOrderingTerm
     }
 }

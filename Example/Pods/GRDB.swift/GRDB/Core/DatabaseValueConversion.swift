@@ -1,15 +1,7 @@
-#if SWIFT_PACKAGE
-import CSQLite
-#elseif GRDBCIPHER
-import SQLCipher
-#elseif !GRDBCUSTOMSQLITE && !GRDBCIPHER
-import SQLite3
-#endif
-
 // MARK: - Conversion Context and Errors
 
 /// A type that helps the user understanding value conversion errors
-struct ValueConversionContext: KeyPathRefining {
+struct ValueConversionContext: Refinable {
     private enum Column {
         case columnIndex(Int)
         case columnName(String)
@@ -20,12 +12,12 @@ struct ValueConversionContext: KeyPathRefining {
     var arguments: StatementArguments?
     private var column: Column?
     
-    func atColumn(_ columnIndex: Int) -> ValueConversionContext {
-        return with(\.column, .columnIndex(columnIndex))
+    func atColumn(_ columnIndex: Int) -> Self {
+        with(\.column, .columnIndex(columnIndex))
     }
     
-    func atColumn(_ columnName: String) -> ValueConversionContext {
-        return with(\.column, .columnName(columnName))
+    func atColumn(_ columnName: String) -> Self {
+        with(\.column, .columnName(columnName))
     }
     
     var columnIndex: Int? {
@@ -34,7 +26,7 @@ struct ValueConversionContext: KeyPathRefining {
         case .columnIndex(let index):
             return index
         case .columnName(let name):
-            return row?.index(ofColumn: name)
+            return row?.index(forColumn: name)
         }
     }
     
@@ -90,7 +82,7 @@ func conversionErrorMessage<T>(
     to: T.Type,
     from dbValue: DatabaseValue?,
     conversionContext: ValueConversionContext?)
-    -> String
+-> String
 {
     var message: String
     var extras: [String] = []
@@ -136,7 +128,7 @@ func fatalConversionError<T>(
     conversionContext: ValueConversionContext?,
     file: StaticString = #file,
     line: UInt = #line)
-    -> Never
+-> Never
 {
     fatalError(
         conversionErrorMessage(
@@ -155,7 +147,7 @@ func fatalConversionError<T>(
     atColumn columnName: String,
     file: StaticString = #file,
     line: UInt = #line)
-    -> Never
+-> Never
 {
     fatalConversionError(
         to: T.self,
@@ -170,7 +162,7 @@ func fatalConversionError<T>(
     index: Int32,
     file: StaticString = #file,
     line: UInt = #line)
-    -> Never
+-> Never
 {
     let row = Row(sqliteStatement: sqliteStatement)
     fatalConversionError(
@@ -187,7 +179,7 @@ func fatalConversionError<T>(
     index: Int32,
     file: StaticString = #file,
     line: UInt = #line)
-    -> Never
+-> Never
 {
     let row = Row(sqliteStatement: sqliteStatement)
     fatalConversionError(
@@ -213,7 +205,7 @@ extension DatabaseValueConvertible {
     static func decode(
         from dbValue: DatabaseValue,
         conversionContext: @autoclosure () -> ValueConversionContext?)
-        -> Self
+    -> Self
     {
         if let value = fromDatabaseValue(dbValue) {
             return value
@@ -224,7 +216,7 @@ extension DatabaseValueConvertible {
     
     @usableFromInline
     static func decode(from row: Row, atUncheckedIndex index: Int) -> Self {
-        return decode(
+        decode(
             from: row.impl.databaseValue(atUncheckedIndex: index),
             conversionContext: ValueConversionContext(row).atColumn(index))
     }
@@ -244,7 +236,7 @@ extension DatabaseValueConvertible {
     static func decodeIfPresent(
         from dbValue: DatabaseValue,
         conversionContext: @autoclosure () -> ValueConversionContext?)
-        -> Self?
+    -> Self?
     {
         // Use fromDatabaseValue before checking for null: this allows DatabaseValue to convert NULL to .null.
         if let value = fromDatabaseValue(dbValue) {
@@ -258,7 +250,7 @@ extension DatabaseValueConvertible {
     
     @usableFromInline
     static func decodeIfPresent(from row: Row, atUncheckedIndex index: Int) -> Self? {
-        return decodeIfPresent(
+        decodeIfPresent(
             from: row.impl.databaseValue(atUncheckedIndex: index),
             conversionContext: ValueConversionContext(row).atColumn(index))
     }
@@ -307,17 +299,17 @@ extension Row {
     func fastDecode<Value: DatabaseValueConvertible & StatementColumnConvertible>(
         _ type: Value.Type,
         atUncheckedIndex index: Int)
-        -> Value
+    -> Value
     {
-        return impl.fastDecode(type, atUncheckedIndex: index)
+        impl.fastDecode(type, atUncheckedIndex: index)
     }
     
     @usableFromInline
     func fastDecodeIfPresent<Value: DatabaseValueConvertible & StatementColumnConvertible>(
         _ type: Value.Type,
         atUncheckedIndex index: Int)
-        -> Value?
+    -> Value?
     {
-        return impl.fastDecodeIfPresent(type, atUncheckedIndex: index)
+        impl.fastDecodeIfPresent(type, atUncheckedIndex: index)
     }
 }

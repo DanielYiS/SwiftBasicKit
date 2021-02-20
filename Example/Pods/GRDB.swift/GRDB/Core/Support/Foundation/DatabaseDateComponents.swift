@@ -1,11 +1,4 @@
 import Foundation
-#if SWIFT_PACKAGE
-import CSQLite
-#elseif GRDBCIPHER
-import SQLCipher
-#elseif !GRDBCUSTOMSQLITE && !GRDBCIPHER
-import SQLite3
-#endif
 
 /// DatabaseDateComponents reads and stores DateComponents in the database.
 public struct DatabaseDateComponents: DatabaseValueConvertible, StatementColumnConvertible, Codable {
@@ -84,7 +77,7 @@ public struct DatabaseDateComponents: DatabaseValueConvertible, StatementColumnC
         let optionalComponents = cString.withMemoryRebound(
             to: Int8.self,
             capacity: length + 1 /* trailing \0 */) { cString in
-                SQLiteDateParser().components(cString: cString, length: length)
+            SQLiteDateParser().components(cString: cString, length: length)
         }
         guard let components = optionalComponents else {
             fatalConversionError(to: DatabaseDateComponents.self, sqliteStatement: sqliteStatement, index: index)
@@ -159,10 +152,10 @@ public struct DatabaseDateComponents: DatabaseValueConvertible, StatementColumnC
         
         return SQLiteDateParser().components(from: string)
     }
-
+    
     // MARK: - Codable adoption
-
-
+    
+    
     /// Creates a new instance by decoding from the given decoder.
     ///
     /// - parameters:
@@ -176,7 +169,7 @@ public struct DatabaseDateComponents: DatabaseValueConvertible, StatementColumnC
         }
         self = decodedValue
     }
-
+    
     /// Encodes this value into the given encoder.
     ///
     /// - parameters:

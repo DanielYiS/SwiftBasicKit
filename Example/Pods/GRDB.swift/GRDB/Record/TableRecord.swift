@@ -1,15 +1,13 @@
 import Foundation
 
-/// Types that adopt TableRecord declare a particular relationship with
+/// Types that adopt `TableRecord` declare a particular relationship with
 /// a database table.
 ///
-/// Types that adopt both TableRecord and FetchableRecord are granted with
+/// Types that adopt both `TableRecord` and `FetchableRecord` are granted with
 /// built-in methods that allow to fetch instances identified by key:
 ///
 ///     try Player.fetchOne(db, key: 123)  // Player?
 ///     try Citizenship.fetchOne(db, key: ["citizenId": 12, "countryId": 45]) // Citizenship?
-///
-/// TableRecord is adopted by Record.
 public protocol TableRecord {
     /// The name of the database table used to build requests.
     ///
@@ -89,12 +87,12 @@ extension TableRecord {
     /// - HTTPRequest -> "httpRequest"
     /// - TOEFL -> "toefl"
     public static var databaseTableName: String {
-        return defaultDatabaseTableName
+        defaultDatabaseTableName
     }
     
     /// Default value: `[AllColumns()]`.
     public static var databaseSelection: [SQLSelectable] {
-        return [AllColumns()]
+        [AllColumns()]
     }
 }
 
@@ -106,35 +104,13 @@ extension TableRecord {
     ///
     /// - parameter db: A database connection.
     public static func fetchCount(_ db: Database) throws -> Int {
-        return try all().fetchCount(db)
+        try all().fetchCount(db)
     }
 }
 
 extension TableRecord {
     
     // MARK: - SQL Generation
-    
-    /// The selection as an SQL String.
-    ///
-    /// For example:
-    ///
-    ///     struct Player: TableRecord {
-    ///         static let databaseTableName = "player"
-    ///     }
-    ///
-    ///     // SELECT "player".* FROM player
-    ///     let sql = "SELECT \(Player.selectionSQL()) FROM player"
-    ///
-    ///     // SELECT "p".* FROM player AS p
-    ///     let sql = "SELECT \(Player.selectionSQL(alias: "p")) FROM player p"
-    public static func selectionSQL(alias: String? = nil) -> String {
-        let alias = TableAlias(tableName: databaseTableName, userName: alias)
-        let selection = databaseSelection.map { $0.qualifiedSelectable(with: alias) }
-        var context = SQLGenerationContext.selectionContext
-        return selection
-            .map { $0.resultColumnSQL(&context) }
-            .joined(separator: ", ")
-    }
     
     /// Returns the number of selected columns.
     ///
@@ -157,7 +133,7 @@ extension TableRecord {
     public static func numberOfSelectedColumns(_ db: Database) throws -> Int {
         let alias = TableAlias(tableName: databaseTableName)
         return try databaseSelection
-            .map { try $0.qualifiedSelectable(with: alias).columnCount(db) }
+            .map { try $0.sqlSelection.qualified(with: alias).columnCount(db) }
             .reduce(0, +)
     }
 }

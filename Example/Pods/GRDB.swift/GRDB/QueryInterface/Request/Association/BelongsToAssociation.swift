@@ -58,7 +58,7 @@
 ///     }
 ///
 /// See ForeignKey for more information.
-public struct BelongsToAssociation<Origin: TableRecord, Destination: TableRecord>: AssociationToOne {
+public struct BelongsToAssociation<Origin, Destination>: AssociationToOne {
     /// :nodoc:
     public typealias OriginRowDecoder = Origin
     
@@ -66,37 +66,36 @@ public struct BelongsToAssociation<Origin: TableRecord, Destination: TableRecord
     public typealias RowDecoder = Destination
     
     /// :nodoc:
-    public var sqlAssociation: SQLAssociation
+    public var _sqlAssociation: _SQLAssociation
     
     /// :nodoc:
-    public init(sqlAssociation: SQLAssociation) {
-        self.sqlAssociation = sqlAssociation
+    public init(sqlAssociation: _SQLAssociation) {
+        self._sqlAssociation = sqlAssociation
     }
     
     init(
+        to destinationRelation: SQLRelation,
         key: String?,
         using foreignKey: ForeignKey?)
     {
-        let foreignKeyRequest = SQLForeignKeyRequest(
-            originTable: Origin.databaseTableName,
-            destinationTable: Destination.databaseTableName,
-            foreignKey: foreignKey)
+        let destinationTable = destinationRelation.source.tableName
         
-        let condition = SQLAssociationCondition(
-            foreignKeyRequest: foreignKeyRequest,
+        let foreignKeyCondition = SQLForeignKeyCondition(
+            destinationTable: destinationTable,
+            foreignKey: foreignKey,
             originIsLeft: true)
         
         let associationKey: SQLAssociationKey
         if let key = key {
             associationKey = .fixedSingular(key)
         } else {
-            associationKey = .inflected(Destination.databaseTableName)
+            associationKey = .inflected(destinationTable)
         }
         
-        sqlAssociation = SQLAssociation(
+        _sqlAssociation = _SQLAssociation(
             key: associationKey,
-            condition: condition,
-            relation: Destination.all().relation,
+            condition: .foreignKey(foreignKeyCondition),
+            relation: destinationRelation,
             cardinality: .toOne)
     }
 }

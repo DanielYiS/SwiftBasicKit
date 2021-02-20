@@ -1,5 +1,7 @@
 import UIKit
 import BFKit.Swift
+import HandyJSON.Swift
+import CryptoSwift.Swift
 
 public typealias ZResponseBlock = ((_ result: ZNetworkResult) -> (Void))
 

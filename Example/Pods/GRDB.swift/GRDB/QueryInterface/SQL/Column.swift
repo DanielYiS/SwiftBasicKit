@@ -17,7 +17,7 @@
 ///     let arthur = try Player.filter(nameColumn == "Arthur").fetchOne(db)
 ///
 /// See https://github.com/groue/GRDB.swift#the-query-interface
-public protocol ColumnExpression: SQLExpression {
+public protocol ColumnExpression: SQLSpecificExpressible {
     /// The unqualified name of a database column.
     ///
     /// "score" is a valid unqualified name. "player.score" is not.
@@ -25,16 +25,8 @@ public protocol ColumnExpression: SQLExpression {
 }
 
 extension ColumnExpression {
-    /// [**Experimental**](http://github.com/groue/GRDB.swift#what-are-experimental-features)
-    /// :nodoc:
-    public func expressionSQL(_ context: inout SQLGenerationContext, wrappedInParenthesis: Bool) -> String {
-        return name.quotedDatabaseIdentifier
-    }
-    
-    /// [**Experimental**](http://github.com/groue/GRDB.swift#what-are-experimental-features)
-    /// :nodoc:
-    public func qualifiedExpression(with alias: TableAlias) -> SQLExpression {
-        return QualifiedColumn(name, alias: alias)
+    public var sqlExpression: SQLExpression {
+        .column(name)
     }
 }
 
@@ -44,7 +36,7 @@ extension ColumnExpression {
 /// Instead, adopt the ColumnExpression protocol.
 ///
 /// See https://github.com/groue/GRDB.swift#the-query-interface
-public struct Column: ColumnExpression {
+public struct Column: ColumnExpression, Equatable {
     /// The hidden rowID column
     public static let rowID = Column("rowid")
     
@@ -62,30 +54,6 @@ public struct Column: ColumnExpression {
     }
 }
 
-/// A qualified column in the database, as in `SELECT t.a FROM t`
-struct QualifiedColumn: ColumnExpression {
-    var name: String
-    let alias: TableAlias
-    
-    /// Creates a column given its name.
-    init(_ name: String, alias: TableAlias) {
-        self.name = name
-        self.alias = alias
-    }
-    
-    func expressionSQL(_ context: inout SQLGenerationContext, wrappedInParenthesis: Bool) -> String {
-        if let qualifier = context.qualifier(for: alias) {
-            return qualifier.quotedDatabaseIdentifier + "." + name.quotedDatabaseIdentifier
-        }
-        return name.quotedDatabaseIdentifier
-    }
-    
-    func qualifiedExpression(with alias: TableAlias) -> SQLExpression {
-        // Never requalify
-        return self
-    }
-}
-
 /// Support for column enums:
 ///
 ///     struct Player {
@@ -94,7 +62,5 @@ struct QualifiedColumn: ColumnExpression {
 ///         }
 ///     }
 extension ColumnExpression where Self: RawRepresentable, Self.RawValue == String {
-    public var name: String {
-        return rawValue
-    }
+    public var name: String { rawValue }
 }
