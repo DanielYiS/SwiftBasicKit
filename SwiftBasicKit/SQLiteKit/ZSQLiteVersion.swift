@@ -1,6 +1,7 @@
 import UIKit
 import BFKit
 import GRDB.Swift
+import CryptoSwift
 
 /// 数据库版本管理
 struct ZSQLiteVersion {
@@ -57,6 +58,7 @@ struct ZSQLiteVersion {
                     t.column("login_userid", .text).notNull().defaults(to: "").indexed()
                     t.primaryKey(["message_id"])
                 })
+                ZSQLiteVersion.initDetaultData(db: db)
             }
         } catch {
             BFLog.error("createdb version error: \(error.localizedDescription)")
@@ -66,10 +68,32 @@ struct ZSQLiteVersion {
     static func createTableVersion1() {
         do {
             try ZSQLiteKit.shared.connection?.write { db in
-            
+                
             }
         } catch {
             BFLog.error("createdb version error: \(error.localizedDescription)")
         }
     }
+    /// 初始化默认数据
+    private static func initDetaultData(db: GRDB.Database) {
+        do {
+            // 客服
+            let serviceUser = ZModelUserBase.init()
+            serviceUser.token = ZKit.getRandomId()
+            serviceUser.userid = "999999"
+            serviceUser.nickname = "Service"
+            serviceUser.password = "ssssss".md5()
+            serviceUser.gender = .male
+            serviceUser.age = 21
+            serviceUser.birthday = "01/01/2000"
+            serviceUser.avatar = ""
+            serviceUser.email = "Service@gmail.com"
+            serviceUser.balance = 1368
+            serviceUser.introduction = "I am Service"
+            try serviceUser.insert(db)
+        } catch {
+            BFLog.error("create Data error: \(error.localizedDescription)")
+        }
+    }
 }
+
