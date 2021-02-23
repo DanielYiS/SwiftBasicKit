@@ -58,6 +58,26 @@ struct ZSQLiteVersion {
                     t.column("login_userid", .text).notNull().defaults(to: "").indexed()
                     t.primaryKey(["message_id"])
                 })
+                try db.create(table: ZModelUserBehavior.databaseTableName, ifNotExists: true, body: {t in
+                    t.column("behavior_userid", .text).notNull().defaults(to: "")
+                    t.column("behavior_time", .double).notNull().defaults(to: 0)
+                    t.column("behavior_type", .integer).notNull().defaults(to: 0)
+                    t.column("login_userid", .text).notNull().defaults(to: "").indexed()
+                    t.primaryKey(["behavior_userid", "login_userid", "behavior_type"])
+                })
+                try db.create(table: ZModelRoom.databaseTableName, ifNotExists: true, body: { t in
+                    t.column("room_ownerid", .text).notNull().defaults(to: "")
+                    t.column("room_name", .text).notNull().defaults(to: "")
+                    t.column("room_type", .integer).notNull().defaults(to: 0)
+                    t.column("room_time", .double).notNull().defaults(to: 0)
+                    t.column("room_video", .text).notNull().defaults(to: "")
+                    t.column("room_cover", .text).notNull().defaults(to: "")
+                    t.column("is_online", .boolean).notNull().defaults(to: true)
+                    t.column("online_count", .integer).notNull().defaults(to: 1)
+                    t.column("is_like", .boolean).notNull().defaults(to: false)
+                    t.column("like_count", .integer).notNull().defaults(to: 0)
+                    t.primaryKey(["room_ownerid"])
+                })
                 ZSQLiteVersion.initDetaultData(db: db)
             }
         } catch {

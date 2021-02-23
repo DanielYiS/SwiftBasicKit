@@ -56,6 +56,8 @@ public enum zUserBehaviorType: Int, HandyJSONEnum, DatabaseValueConvertible {
     case black = 3
     /// 收藏
     case collect = 4
+    /// 删除
+    case delete = 5
 }
 /// 消息类型
 public enum zMessageType: Int, HandyJSONEnum, DatabaseValueConvertible {
