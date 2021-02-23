@@ -195,4 +195,16 @@ extension ZSQLiteKit {
         }
         return count
     }
+    /// 获取用户行为集合
+    public static func getArrayBehavior<T: ZModelUserBehavior>(models: inout [T]?, type: zUserBehaviorType, page: Int = 0) {
+        do {
+            try ZSQLiteKit.shared.connection?.write({ db in
+                models = try T.fetchAll(db,
+                                        sql: "SELECT t1.*,t2.* FROM tb_user_behavior t1 LEFT JOIN tb_user t2 ON t1.behavior_userid = t2.userid WHERE t1.login_userid = ? AND t1.behavior_type = ?  ORDER BY t1.behavior_time DESC LIMIT ? OFFSET ?",
+                                        arguments: [ZSettingKit.shared.userId, type, ZKey.number.pageCount, page * ZKey.number.pageCount])
+            })
+        } catch {
+            BFLog.error("sqlite write error: \(error.localizedDescription)")
+        }
+    }
 }
