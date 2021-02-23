@@ -8,13 +8,13 @@
 # 1. new code update github
 # 2. local not code : pod repo add SwiftBasicKit  https://github.com/cdzhangshuangyu/SwiftBasicKit.git
 #    local uodate code: cd ~/.cocoapods/repos/SwiftBasicKit. Then execute: pod repo update SwiftBasicKit
-# 3. pod repo push SwiftBasicKit SwiftBasicKit.podspec --sources='https://github.com/CocoaPods/Specs.git'
+# 3. pod repo push SwiftBasicKit SwiftBasicKit.podspec --allow-warnings --sources='https://github.com/CocoaPods/Specs.git'
 # 4. pod trunk push SwiftBasicKit.podspec --allow-warnings
 # 5. pod install or pod update on you project execute
 
 Pod::Spec.new do |s|
   s.name             = 'SwiftBasicKit'
-  s.version          = '0.1.1'
+  s.version          = '0.1.2'
   s.summary          = 'SwiftBasicKit'
   s.module_name      = 'SwiftBasicKit'
 
