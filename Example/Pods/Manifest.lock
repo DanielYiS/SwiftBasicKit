@@ -11,7 +11,7 @@ PODS:
   - Moya/Core (14.0.0):
     - Alamofire (~> 5.0)
   - Result (5.0.0)
-  - SwiftBasicKit (0.0.9):
+  - SwiftBasicKit (0.1.1):
     - Alamofire
     - BFKit-Swift
     - CryptoSwift
@@ -45,7 +45,7 @@ SPEC CHECKSUMS:
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
   Moya: 5b45dacb75adb009f97fde91c204c1e565d31916
   Result: ed341d2f236af425b803e690e9bd8fd0a0cb7c5a
-  SwiftBasicKit: c0614137d0ce49fa21f0e3f782c43f72a92acf27
+  SwiftBasicKit: 48b289164e1a70c131532713cd728e654cdcd98f
 
 PODFILE CHECKSUM: ba8332b65f65f2df411bef966294c306f2956cfd
 
