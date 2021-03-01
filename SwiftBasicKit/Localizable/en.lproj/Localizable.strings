@@ -1,6 +1,11 @@
 /* 
-  Localizable.strings
-*/
+ Localizable.strings
+ */
 
-/// 返回数据错误
 "errorResultData" = "Result data error";
+"hudLabelText" = "Waiting...";
+
+"btnCancel" = "Cancel";
+"btnContinue" = "Continue";
+
+"labelNoData" = "No Data";

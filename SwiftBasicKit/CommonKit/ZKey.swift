@@ -37,81 +37,6 @@ public struct ZKey {
     public var payAgreement = ""
 }
 extension ZKey {
-    /// 自定义限制
-    public static let number = Number.init()
-    /// 自定义限制
-    public struct Number {
-        /// 键盘最小高度
-        public let keyboardHeight: CGFloat = 180
-        /// 动画时间 0.25
-        public let animateTime: TimeInterval = 0.25
-        /// 提示框等待时长
-        public let toastWaitTime: TimeInterval = 5
-        /// 消息重连间隔 10
-        public let messageReconnectTime: TimeInterval = 10
-        /// 广告切换间隔
-        public let bannerSwitchTime: TimeInterval = 5.0
-        /// PNG->JPEG压缩值
-        public let pngToJpegCompress: CGFloat = 0.6
-        
-        /// 分页默认数量 10
-        public let pageCount: Int = 10
-        /// 显示最大数量 999
-        public let maxCount: Int = 999
-        
-        /// 超过多少秒评价
-        public let evaluationTime: Int = 60
-        
-        /// 昵称最小数量 3
-        public let nickNameMinCount: Int = 3
-        /// 昵称最大数量 20
-        public let nickNameMaxCount: Int = 20
-        
-        /// 邮箱长度最小值 6
-        public let emailMinCount: Int = 6
-        /// 邮箱长度最大值 50
-        public let emailMaxCount: Int = 50
-        
-        /// 密码长度最小值 6
-        public let passwordMinCount: Int = 6
-        /// 密码长度最大值 20
-        public let passwordMaxCount: Int = 20
-        
-        /// 关于我最大数量 140
-        public let aboutMeMaxCount: Int = 140
-        /// 消息内容长度限制 140
-        public let messageMaxCount: Int = 140
-        /// 举报内容长度限制 10
-        public let reportMinCount: Int = 10
-        /// 举报内容长度限制 140
-        public let reportMaxCount: Int = 140
-        /// 意见反馈长度限制 10
-        public let feedBackMinCount: Int = 10
-        /// 意见反馈长度限制 140
-        public let feedBackMaxCount: Int = 140
-        
-        /// 年龄长度最大值 3
-        public let ageMaxCount: Int = 3
-        /// 最大年龄 80
-        static let ageMax: Int = 80
-        /// 最小年龄 18
-        static let ageMin: Int = 18
-        /// 默认年龄 25
-        static let ageDefault: Int = 25
-        
-        /// 最大照片数量 9
-        static let photoMaxCount: Int = 9
-        
-        /// Tag最大选中数量 10
-        static let tagMaxCount: Int = 10
-        
-        /// 最小距离 5
-        static let distanceMin: Int = 5
-        /// 最小距离 200
-        static let distanceMax: Int = 200
-    }
-}
-extension ZKey {
     /// 时间格式化
     public static let timeFormat = TimeFormat.init()
     /// 时间格式化
@@ -183,7 +108,7 @@ extension ZKey {
     /// 苹果内购
     public struct ApplePay {
         /// 检查是否存在内购项
-        public func checkExistProductId(id: String) -> Bool {
+        public func isExistProductId(id: String) -> Bool {
             return ZKey.shared.productIds.contains(id)
         }
     }
@@ -193,26 +118,4 @@ extension ZKey {
         ZKey.shared.productIds.removeAll()
         ZKey.shared.productIds.append(contentsOf: ids)
     }
-}
-extension ZKey {
-    /// 手机系统名称
-    public static let SystemName: String = UIDevice.current.systemName
-    /// 手机系统版本
-    public static let SystemVersion: Float = UIDevice.current.systemVersion.floatValue
-    /// 应用版本号
-    public static let AppVersion: String = (Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String) ?? ""
-    /// 应用名称
-    public static let AppName: String = (Bundle.main.infoDictionary?["CFBundleName"] as? String) ?? ""
-    /// BundleIdentifier
-    public static let BundleIdentifier: String = (Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String) ?? ""
-    /// 设备名称
-    public static let DeviceName: String = UIDevice.current.modelName
-    
-    /// 应用地址
-    public static let AppUrl: String = "itms-apps://itunes.apple.com/cn/app/id\(ZKey.appId.appleId)"
-    /// 评分地址
-    public static let AppRateUrl: String = "itms-apps://itunes.apple.com/app/id\(ZKey.appId.appleId)?action=write-review"
-    
-    /// 拨打电话
-    public static let TelPhone: String = "telprompt://"
 }

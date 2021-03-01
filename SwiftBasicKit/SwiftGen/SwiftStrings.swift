@@ -10,8 +10,16 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum L10n {
+  /// Cancel
+  internal static let btnCancel = L10n.tr("Localizable", "btnCancel")
+  /// Continue
+  internal static let btnContinue = L10n.tr("Localizable", "btnContinue")
   /// Result data error
   internal static let errorResultData = L10n.tr("Localizable", "errorResultData")
+  /// Waiting...
+  internal static let hudLabelText = L10n.tr("Localizable", "hudLabelText")
+  /// No Data
+  internal static let labelNoData = L10n.tr("Localizable", "labelNoData")
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

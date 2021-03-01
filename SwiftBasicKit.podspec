@@ -14,7 +14,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SwiftBasicKit'
-  s.version          = '0.1.7'
+  s.version          = '0.1.8'
   s.summary          = 'SwiftBasicKit'
   s.module_name      = 'SwiftBasicKit'
 
@@ -34,10 +34,17 @@ Pod::Spec.new do |s|
   s.resources     = ['SwiftBasicKit/**/*.strings']
   
   s.dependency 'Moya'
+  s.dependency 'PKHUD'
   s.dependency 'Result'
+  s.dependency 'SnapKit'
+  s.dependency 'SwiftDate'
   s.dependency 'Alamofire'
   s.dependency 'HandyJSON'
+  s.dependency 'Kingfisher'
+  s.dependency 'GRDB.swift'
+  s.dependency 'Toast-Swift'
   s.dependency 'BFKit-Swift'
   s.dependency 'CryptoSwift'
-  s.dependency 'GRDB.swift'
+  s.dependency 'SKPhotoBrowser'
+  s.dependency 'ESPullToRefresh'
 end

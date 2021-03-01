@@ -4,13 +4,13 @@ import GRDB.Swift
 
 /// app状态类型
 public enum zAppStatus: Int, HandyJSONEnum, DatabaseValueConvertible {
-    /// 检查中
+    /// 无
     case none = 0
     /// 开发中
     case dev = 1
-    /// 审核中
+    /// 发布中
     case release = 2
-    /// 正常
+    /// 运营中
     case prod = 3
 }
 /// 文件类型
@@ -37,6 +37,8 @@ public enum zUserGender: Int, HandyJSONEnum, DatabaseValueConvertible {
 }
 /// 用户角色
 public enum zUserRole: Int, HandyJSONEnum, DatabaseValueConvertible {
+    /// 游客
+    case guest = 0
     /// 用户
     case user = 1
     /// 主播
@@ -73,8 +75,6 @@ public enum zMessageType: Int, HandyJSONEnum, DatabaseValueConvertible {
     case video = 4
     /// 定位
     case location = 5
-    /// 爱心
-    case love = 6
     /// 系统消息
     case system = 9
 }
@@ -97,4 +97,6 @@ public enum zRoomType: Int, HandyJSONEnum, DatabaseValueConvertible {
     case pk = 4
     /// 聊天室
     case chat = 5
+    /// 语音
+    case voice = 6
 }

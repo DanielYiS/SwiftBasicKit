@@ -99,14 +99,14 @@ struct ZSQLiteVersion {
         do {
             // 客服
             let serviceUser = ZModelUserBase.init()
-            serviceUser.token = ZKit.getRandomId()
+            serviceUser.token = kRandomId
             serviceUser.userid = "999999"
             serviceUser.nickname = "Service"
             serviceUser.password = "ssssss".md5()
-            serviceUser.gender = .male
+            serviceUser.gender = .female
             serviceUser.age = 21
-            serviceUser.birthday = "01/01/2000"
-            serviceUser.avatar = "appicon"
+            serviceUser.birthday = ""
+            serviceUser.avatar = ""
             serviceUser.email = "Service@gmail.com"
             serviceUser.balance = 999
             serviceUser.introduction = "I am Service"

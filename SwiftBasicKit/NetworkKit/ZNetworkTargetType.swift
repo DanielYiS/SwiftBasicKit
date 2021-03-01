@@ -47,9 +47,9 @@ extension ZNetworkTargetType: TargetType {
         case .uploadImages(_, let images):
             var datas = [MultipartFormData]()
             images.forEach { (image) in
-                if let data = image.jpegData(compressionQuality: ZKey.number.pngToJpegCompress) {
+                if let data = image.jpegData(compressionQuality: 0.6) {
                     let provider = MultipartFormData.FormDataProvider.data(data)
-                    let fileName = ZKit.getRandomId()
+                    let fileName = kRandomId
                     let format = MultipartFormData.init(provider: provider, name: "file", fileName: "\(fileName).jpeg", mimeType: "image/jpeg")
                     datas.append(format)
                 }
@@ -59,7 +59,7 @@ extension ZNetworkTargetType: TargetType {
             var datas = [MultipartFormData]()
             files.forEach { (data) in
                 let provider = MultipartFormData.FormDataProvider.data(data)
-                let fileName = ZKit.getRandomId()
+                let fileName = kRandomId
                 var mimetype = "image/" + type.rawValue
                 switch type {
                 case .jpeg, .png: mimetype = "image/" + type.rawValue

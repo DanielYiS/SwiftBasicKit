@@ -32,4 +32,7 @@ public struct ZColor {
     public var BackgroundColor: UIColor = UIColor.init(hex: "#FFFFFF")
     /// view边框颜色
     public var ViewBorderColor: UIColor = UIColor.init(hex: "#BCBCBC")
+    
+    /// 键盘背景颜色
+    public var KeyboardBackgroundColor: UIColor = UIColor.init(hex: "#EFF2F8")
 }

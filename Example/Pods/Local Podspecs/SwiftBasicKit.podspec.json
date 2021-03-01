@@ -1,6 +1,6 @@
 {
   "name": "SwiftBasicKit",
-  "version": "0.1.6",
+  "version": "0.1.8",
   "summary": "SwiftBasicKit",
   "module_name": "SwiftBasicKit",
   "homepage": "https://github.com/cdzhangshuangyu/SwiftBasicKit",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/cdzhangshuangyu/SwiftBasicKit.git",
-    "tag": "0.1.6"
+    "tag": "0.1.8"
   },
   "platforms": {
     "ios": "10.0"
@@ -36,7 +36,16 @@
     "Moya": [
 
     ],
+    "PKHUD": [
+
+    ],
     "Result": [
+
+    ],
+    "SnapKit": [
+
+    ],
+    "SwiftDate": [
 
     ],
     "Alamofire": [
@@ -45,13 +54,25 @@
     "HandyJSON": [
 
     ],
+    "Kingfisher": [
+
+    ],
+    "GRDB.swift": [
+
+    ],
+    "Toast-Swift": [
+
+    ],
     "BFKit-Swift": [
 
     ],
     "CryptoSwift": [
 
     ],
-    "GRDB.swift": [
+    "SKPhotoBrowser": [
+
+    ],
+    "ESPullToRefresh": [
 
     ]
   },

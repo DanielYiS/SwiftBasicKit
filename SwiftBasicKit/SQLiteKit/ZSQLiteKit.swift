@@ -108,19 +108,19 @@ extension ZSQLiteKit {
     /// values 对应条件里面的?
     public static func getArrayWhere<T: Record>(models: inout [T]?, filter: String, values: [Any], order: String? = nil, page: Int = 0) {
         do {
-            let size = ZKey.number.pageCount
+            let page = kPageCount
             try ZSQLiteKit.shared.connection?.write({ db in
                 if let arguments = StatementArguments.init(values) {
                     if let strOrder = order {
-                        models = try T.filter(sql: filter, arguments: arguments).order(Column(strOrder).desc).limit(page * size, offset: size).fetchAll(db)
+                        models = try T.filter(sql: filter, arguments: arguments).order(Column(strOrder).desc).limit(page * page, offset: page).fetchAll(db)
                     } else {
-                        models = try T.filter(sql: filter, arguments: arguments).limit(page * size, offset: size).fetchAll(db)
+                        models = try T.filter(sql: filter, arguments: arguments).limit(page * page, offset: page).fetchAll(db)
                     }
                 } else {
                     if let strOrder = order {
-                        models = try T.filter(sql: filter).limit(page * size, offset: size).order(Column(strOrder).desc).fetchAll(db)
+                        models = try T.filter(sql: filter).limit(page * page, offset: page).order(Column(strOrder).desc).fetchAll(db)
                     } else {
-                        models = try T.filter(sql: filter).limit(page * size, offset: size).fetchAll(db)
+                        models = try T.filter(sql: filter).limit(page * page, offset: page).fetchAll(db)
                     }
                 }
             })
@@ -202,7 +202,7 @@ extension ZSQLiteKit {
             try ZSQLiteKit.shared.connection?.write({ db in
                 models = try T.fetchAll(db,
                                         sql: "SELECT t1.*,t2.* FROM tb_user_behavior t1 LEFT JOIN tb_user t2 ON t1.behavior_userid = t2.userid WHERE t1.login_userid = ? AND t1.behavior_type = ?  ORDER BY t1.behavior_time DESC LIMIT ? OFFSET ?",
-                                        arguments: [ZSettingKit.shared.userId, type, ZKey.number.pageCount, page * ZKey.number.pageCount])
+                                        arguments: [ZSettingKit.shared.userId, type, kPageCount, page * kPageCount])
             })
         } catch {
             BFLog.error("sqlite write error: \(error.localizedDescription)")
