@@ -1,0 +1,29 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+platform :ios, '10.0'
+inhibit_all_warnings!
+use_frameworks!
+
+target 'SwiftBasicKit_Example' do
+  
+  pod 'SwiftBasicKit', :path => '../SwiftBasicKit.podspec'
+
+  target 'SwiftBasicKit_Tests' do
+    inherit! :search_paths
+
+  end
+end
+post_install do |installer|
+  
+  verTargets = ['Result', 'SKPhotoBrowser']
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '10.0'
+    end
+    if verTargets.include? target.name
+      target.build_configurations.each do |config|
+        config.build_settings['SWIFT_VERSION'] = '5.0'
+      end
+    end
+  end
+end
