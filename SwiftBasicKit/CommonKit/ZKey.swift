@@ -25,7 +25,11 @@ public struct ZKey {
     /// 统计平台
     private var countAppId = ""
     
-    /// 控制图片来源 true kit false 项目
+    /// udid
+    public var udid: String = ""
+    /// 来源归因
+    public var media: String = ""
+    /// 控制图片来源 true 包内部图片 false 工程项目图片
     public var sourceKit: Bool = true
 }
 extension ZKey {

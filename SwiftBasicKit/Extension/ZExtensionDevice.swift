@@ -74,8 +74,8 @@ extension UIDevice {
         case "AppleTV2,1": return "Apple TV 2"
         case "AppleTV3,1", "AppleTV3,2": return "Apple TV 3"
         case "AppleTV5,3": return "Apple TV 4"
-        case "i386", "x86_64": return "iPhone 11 Pro"
-        default: return "iPhone"
+        case "i386", "x86_64": return "iPhone Simulator"
+        default: return identifier
         }
     }
 }

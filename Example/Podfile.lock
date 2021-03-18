@@ -16,7 +16,7 @@ PODS:
   - Result (5.0.0)
   - SKPhotoBrowser (6.1.0)
   - SnapKit (5.0.1)
-  - SwiftBasicKit (0.3.7):
+  - SwiftBasicKit (0.3.8):
     - Alamofire
     - BFKit-Swift
     - CryptoSwift
@@ -74,7 +74,7 @@ SPEC CHECKSUMS:
   Result: ed341d2f236af425b803e690e9bd8fd0a0cb7c5a
   SKPhotoBrowser: 343de95d89dc7913763c5dda243cc6e606e4a168
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
-  SwiftBasicKit: 1cdbf7bdba6e01c012f1dd1c22c90ef64079d598
+  SwiftBasicKit: 5b24e98a8498b8ac05b2d7bc237f02ca5d36b051
   SwiftDate: 72d28954e8e1c6c1c0f917ccc8005e4f83c7d4b2
   SwiftyStoreKit: 6b9c08810269f030586dac1fae8e75871a82e84a
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711

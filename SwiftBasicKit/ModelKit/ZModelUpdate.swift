@@ -4,16 +4,17 @@ import GRDB.Swift
 
 public class ZModelUpdate: ZModelBase {
     
-    public class override var databaseTableName: String { "tb_update" }
-    public enum Columns: String, ColumnExpression {
-        case version, update, type, path, title, content
+    public override class var databaseTableName: String { "tb_update" }
+    enum Columns: String, ColumnExpression {
+        case version, title, content, link, update, status, ignore
     }
     public var version: String = ""
     public var title: String = ""
     public var content: String = ""
-    public var path: String = ""
+    public var link: String = ""
     public var update: Bool = false
-    public var type: Int = 0
+    public var status: Bool = false
+    public var ignore: [String]?
     
     public required init() {
         super.init()
@@ -26,9 +27,9 @@ public class ZModelUpdate: ZModelBase {
         self.version = model.version
         self.title = model.title
         self.content = model.content
-        self.path = model.path
+        self.link = model.link
         self.update = model.update
-        self.type = model.type
+        self.status = model.status
     }
     public required init(row: Row) {
         super.init(row: row)
@@ -36,9 +37,10 @@ public class ZModelUpdate: ZModelBase {
         self.version = row[Columns.version] ?? ""
         self.title = row[Columns.title] ?? ""
         self.content = row[Columns.content] ?? ""
-        self.path = row[Columns.path] ?? ""
+        self.link = row[Columns.link] ?? ""
         self.update = row[Columns.update] ?? false
-        self.type = row[Columns.type] ?? 0
+        self.status = row[Columns.status] ?? false
+        self.ignore = (row[Columns.status] ?? "").components(separatedBy: "@")
     }
     public override func encode(to container: inout PersistenceContainer) {
         super.encode(to: &container)
@@ -46,17 +48,18 @@ public class ZModelUpdate: ZModelBase {
         container[Columns.version] = self.version
         container[Columns.title] = self.title
         container[Columns.content] = self.content
-        container[Columns.path] = self.path
+        container[Columns.link] = self.link
         container[Columns.update] = self.update
-        container[Columns.type] = self.type
+        container[Columns.status] = self.status
+        container[Columns.ignore] = self.ignore?.joined(separator: "@") ?? ""
     }
     public override func mapping(mapper: HelpingMapper) {
         super.mapping(mapper: mapper)
         
-        mapper <<< self.type <-- "status"
+        mapper <<< self.status <-- "maintain"
         mapper <<< self.title <-- "tips"
         mapper <<< self.content <-- "change_log"
-        mapper <<< self.path <-- "link"
+        mapper <<< self.link <-- "link"
         mapper <<< self.update <-- "is_force"
     }
 }

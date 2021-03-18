@@ -51,10 +51,10 @@ public let kIsIPhoneP   = (kScreenWidth == 414 && kScreenHeight == 736)
 /// 是否IPhoneX XS XR Max
 public let kIsIPhoneX   = (!kIsIPadDevice && kScreenHeight > 736)
 
-/// 系统语言
-public let kCurrentLanguage: String = Bundle.main.preferredLocalizations.first ?? ""
 /// 生成随机32位加密字符串
 public var kRandomId: String { return "\(Date.init().timeIntervalSince1970)\(ZSettingKit.shared.userId)\(arc4random())".md5() }
+/// 系统语言
+public let kCurrentLanguage: String = Bundle.main.preferredLocalizations.first ?? ""
 /// 手机系统名称
 public let kSystemName: String = UIDevice.current.systemName
 /// 手机系统版本
@@ -67,7 +67,8 @@ public let kAppName: String = (Bundle.main.infoDictionary?["CFBundleName"] as? S
 public let kBundleIdentifier: String = (Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String) ?? ""
 /// 设备名称
 public let kDeviceName: String = UIDevice.current.modelName
-
+/// 时区名称
+public let kTimeZoneName: String = TimeZone.current.identifier
 /// 应用地址
 public let kAppUrl: String = "itms-apps://itunes.apple.com/cn/app/id\(ZKey.appId.appleId)"
 /// 评分地址
