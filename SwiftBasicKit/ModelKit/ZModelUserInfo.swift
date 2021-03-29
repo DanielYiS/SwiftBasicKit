@@ -67,18 +67,8 @@ public class ZModelUserInfo: ZModelUserBase {
     }
     public override func mapping(mapper: HelpingMapper) {
         super.mapping(mapper: mapper)
-        
-        mapper <<< self.userid <-- "id"
-        mapper <<< self.token <-- "api_token"
+		
         mapper <<< self.consumption <-- "token"
-        mapper <<< self.nickname <-- "profile.nickname"
-        mapper <<< self.gender <-- "profile.gender"
-        mapper <<< self.age <-- "profile.age"
-        mapper <<< self.avatar <-- "profile.head"
-        mapper <<< self.introduction <-- "profile.mood"
-        mapper <<< self.country <-- "profile.country"
-        mapper <<< self.province <-- "profile.province"
-        mapper <<< self.city <-- "profile.city"
         mapper <<< self.comment_like_count <-- "comment.nice_count"
         mapper <<< self.comment_nope_count <-- "comment.nope_count"
         mapper <<< self.comment_rating <-- "comment.rating"

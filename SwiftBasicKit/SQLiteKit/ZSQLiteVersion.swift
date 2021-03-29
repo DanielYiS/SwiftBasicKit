@@ -32,6 +32,7 @@ struct ZSQLiteVersion {
                     t.column("bodytype", .text).notNull().defaults(to: "")
                     t.column("belong", .text).notNull().defaults(to: "")
                     t.column("country", .text).notNull().defaults(to: "")
+                    t.column("countrycode", .text).notNull().defaults(to: "")
                     t.column("province", .text).notNull().defaults(to: "")
                     t.column("city", .text).notNull().defaults(to: "")
                     t.column("email", .text).notNull().defaults(to: "")
@@ -42,6 +43,20 @@ struct ZSQLiteVersion {
                     t.column("videos", .text).notNull().defaults(to: "")
                     t.column("show_location", .text).notNull().defaults(to: true)
                     t.primaryKey(["userid"])
+                })
+                try db.create(table: ZModelMessageUser.databaseTableName, ifNotExists: true, body: { t in
+                    t.column("userid", .text).notNull().defaults(to: "").indexed()
+                    t.column("nickname", .text).notNull().defaults(to: "")
+                    t.column("role", .integer).notNull().defaults(to: zUserRole.user)
+                    t.column("gender", .integer).notNull().defaults(to: zUserGender.male)
+                    t.column("avatar", .text).notNull().defaults(to: "")
+                    t.column("age", .integer).notNull().defaults(to: 25)
+                    t.column("messageid", .text).notNull().defaults(to: "")
+                    t.column("message", .text).notNull().defaults(to: "")
+                    t.column("message_type", .integer).notNull().defaults(to: zMessageType.text)
+                    t.column("message_direction", .integer).notNull().defaults(to: zMessageDirection.send)
+                    t.column("login_userid", .text).notNull().defaults(to: "").indexed()
+                    t.primaryKey(["userid", "login_userid"])
                 })
                 try db.create(table: ZModelMessage.databaseTableName, ifNotExists: true, body: { t in
                     t.column("message_id", .text).notNull().defaults(to: "")
@@ -104,15 +119,15 @@ struct ZSQLiteVersion {
             let serviceUser = ZModelUserBase.init()
             serviceUser.token = kRandomId
             serviceUser.userid = "999999"
-            serviceUser.nickname = "Music"
+            serviceUser.nickname = "Live"
             serviceUser.password = "123456".md5()
             serviceUser.gender = .female
             serviceUser.age = 20
             serviceUser.birthday = ""
             serviceUser.avatar = "appicon"
-            serviceUser.email = "Music@gmail.com"
-            serviceUser.balance = 45000
-            serviceUser.introduction = "I am Music"
+            serviceUser.email = "Live@gmail.com"
+            serviceUser.balance = 50000
+            serviceUser.introduction = "I am Live"
             try serviceUser.insert(db)
         } catch {
             BFLog.error("create Data error: \(error.localizedDescription)")

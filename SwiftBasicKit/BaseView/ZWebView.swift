@@ -56,8 +56,8 @@ public class ZWebView: UIView {
         wkView.uiDelegate = self
         wkView.navigationDelegate = self
         wkView.backgroundColor = .clear
-        wkView.scrollView.isScrollEnabled = false
-        wkView.scrollView.showsVerticalScrollIndicator = false
+        wkView.scrollView.isScrollEnabled = true
+        wkView.scrollView.showsVerticalScrollIndicator = true
         wkView.scrollView.showsHorizontalScrollIndicator = false
         wkView.addObserver(self, forKeyPath: "title", options: NSKeyValueObservingOptions.new, context: nil)
         wkView.addObserver(self, forKeyPath: "estimatedProgress", options: NSKeyValueObservingOptions.new, context: nil)
@@ -135,8 +135,6 @@ extension ZWebView: WKUIDelegate, WKNavigationDelegate, WKScriptMessageHandler {
             }
             let bottomHeight: CGFloat = 100
             let conventHeight = webViewHeight + bottomHeight
-            self.bounds.size.height = conventHeight
-            self.wkwebView.bounds.size.height = conventHeight
             self.onViewHeightChange?(conventHeight)
         }
     }

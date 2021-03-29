@@ -171,11 +171,11 @@ extension String {
         return emailTest.evaluate(with: self)
     }
     /// 密码正则  6-20位字母和数字组合
-    public func isPasswordRuler() -> Bool {
+    public func isPassword() -> Bool {
         if self.length == 0 {
             return false
         }
-        let passwordRule = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$"
+        let passwordRule = "^[0-9A-Za-z!@#$%ˆ&*+-=_`~<>\\|/?.,(){}]{6,20}$"
         let regexPassword = NSPredicate(format: "SELF MATCHES %@", passwordRule)
         
         return regexPassword.evaluate(with: self)

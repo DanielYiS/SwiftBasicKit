@@ -55,7 +55,7 @@ public class ZSettingKit: NSObject {
         self.modelUser = ZModelUserBase.deserialize(from: dic)
         self.modelUser?.rawData = dic
         ZKey.shared.token = self.modelUser?.token ?? ""
-        self.setLoginUser(self.modelUser?.rawData)
+        self.setLoginUser(dic)
         if let email = self.modelUser?.email, email.count > 0 {
             let _ = SSKeychain.setPassword(email, forService: kLastEmailKey, account: kLastEmailKey)
         }

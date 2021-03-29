@@ -54,7 +54,7 @@ public let kIsIPhoneX   = (!kIsIPadDevice && kScreenHeight > 736)
 /// 生成随机32位加密字符串
 public var kRandomId: String { return "\(Date.init().timeIntervalSince1970)\(ZSettingKit.shared.userId)\(arc4random())".md5() }
 /// 系统语言
-public let kCurrentLanguage: String = Bundle.main.preferredLocalizations.first ?? ""
+public let kCurrentLanguage: String = Locale.current.languageCode ?? ""
 /// 手机系统名称
 public let kSystemName: String = UIDevice.current.systemName
 /// 手机系统版本

@@ -13,7 +13,7 @@ extension ZModelCopyable {
     }
 }
 private let kZGRDBReferenceRowKey: String = "referenceRow"
-public class ZModelBase: Record, HandyJSON, ZModelCopyable {
+open class ZModelBase: Record, HandyJSON, ZModelCopyable {
     
     public enum Columns: String, ColumnExpression {
         case id

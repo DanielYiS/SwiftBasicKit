@@ -6,7 +6,7 @@ public class ZModelUserBase: ZModelBase {
     
     public class override var databaseTableName: String { "tb_user" }
     public enum Columns: String, ColumnExpression {
-        case token, userid, password, role, nickname, gender, avatar, age, birthday, height, weight, bodytype, belong, country, province, city, email, tel, introduction, balance, photos, videos, show_location
+        case token, userid, password, role, nickname, gender, avatar, age, birthday, height, weight, bodytype, belong, country, countrycode, province, city, email, tel, introduction, balance, photos, videos, show_location
     }
     public var token: String = ""
     public var password: String = ""
@@ -22,6 +22,7 @@ public class ZModelUserBase: ZModelBase {
     public var bodytype: String = ""
     public var belong: String = ""
     public var country: String = ""
+    public var countrycode: String = ""
     public var province: String = ""
     public var city: String = ""
     public var email: String = ""
@@ -54,6 +55,7 @@ public class ZModelUserBase: ZModelBase {
         self.bodytype = model.bodytype
         self.belong = model.belong
         self.country = model.country
+        self.countrycode = model.countrycode
         self.province = model.province
         self.city = model.city
         self.email = model.email
@@ -81,6 +83,7 @@ public class ZModelUserBase: ZModelBase {
         self.bodytype = row[Columns.bodytype] ?? ""
         self.belong = row[Columns.belong] ?? ""
         self.country = row[Columns.country] ?? ""
+        self.countrycode = row[Columns.countrycode] ?? ""
         self.province = row[Columns.province] ?? ""
         self.city = row[Columns.city] ?? ""
         self.email = row[Columns.email] ?? ""
@@ -112,6 +115,7 @@ public class ZModelUserBase: ZModelBase {
         container[Columns.bodytype] = self.bodytype
         container[Columns.belong] = self.belong
         container[Columns.country] = self.country
+        container[Columns.countrycode] = self.countrycode
         container[Columns.province] = self.province
         container[Columns.city] = self.city
         container[Columns.email] = self.email
@@ -129,5 +133,16 @@ public class ZModelUserBase: ZModelBase {
     public override func mapping(mapper: HelpingMapper) {
         super.mapping(mapper: mapper)
         
+        mapper <<< self.userid <-- "id"
+        mapper <<< self.token <-- "api_token"
+        mapper <<< self.nickname <-- "profile.nickname"
+        mapper <<< self.gender <-- "profile.gender"
+        mapper <<< self.age <-- "profile.age"
+        mapper <<< self.avatar <-- "profile.head"
+        mapper <<< self.introduction <-- "profile.mood"
+        mapper <<< self.country <-- "profile.location.country"
+        mapper <<< self.countrycode <-- "profile.location.country_code"
+        mapper <<< self.province <-- "profile.location.province"
+        mapper <<< self.city <-- "profile.location.city"
     }
 }

@@ -26,7 +26,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		874A2E1B5F570E6A6D1A2CB3 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		B4813E6726047A28004F93D6 /* SwiftBasicKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SwiftBasicKit.podspec; path = ../SwiftBasicKit.podspec; sourceTree = "<group>"; };
+		B4813E6726047A28004F93D6 /* SwiftBasicKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SwiftBasicKit.podspec; path = ../SwiftBasicKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		F68A08B9D643B4AC7A03FEE7 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -162,6 +162,7 @@
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = HZWZB8CK8D;
 						LastSwiftMigration = 0900;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -395,6 +396,7 @@
 			baseConfigurationReference = 04D7CE1B6B2594B2D828E701 /* Pods-SwiftBasicKit_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = HZWZB8CK8D;
 				INFOPLIST_FILE = SwiftBasicKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -402,6 +404,7 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ioslivegirlgroup.livegirl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = LiveGirlDev;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -413,6 +416,7 @@
 			baseConfigurationReference = 03F673C5F73C3357B3B3F8E2 /* Pods-SwiftBasicKit_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = HZWZB8CK8D;
 				INFOPLIST_FILE = SwiftBasicKit/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -420,6 +424,7 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ioslivegirlgroup.livegirl;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = LiveGirlDev;
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

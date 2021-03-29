@@ -8,7 +8,7 @@ public struct ZProgressHUD {
     
     public static var shared = ZProgressHUD.init()
     
-    public var toastWaitTime: Double = 0.5
+    public var toastWaitTime: Double = 5
     public var hudLabelSize: CGFloat = 15
     public var hudImage: UIImage? = UIImage.baseImage(named: "hud_progress_circular")
     public var hudBGColor: UIColor = .white
