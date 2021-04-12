@@ -73,6 +73,7 @@ struct ZSQLiteVersion {
                     t.column("message_read_state", .boolean).notNull().defaults(to: false)
                     t.column("message_file_id", .text).notNull().defaults(to: "")
                     t.column("message_file_path", .text).notNull().defaults(to: "")
+                    t.column("message_file_size", .double).notNull().defaults(to: 0)
                     t.column("message_call_count", .integer).notNull().defaults(to: 0)
                     t.column("message_can_call_back", .boolean).notNull().defaults(to: false)
                     t.column("login_userid", .text).notNull().defaults(to: "").indexed()

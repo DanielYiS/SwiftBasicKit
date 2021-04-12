@@ -14,7 +14,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SwiftBasicKit'
-  s.version          = '0.4.7'
+  s.version          = '0.4.8'
   s.summary          = 'SwiftBasicKit'
   s.module_name      = 'SwiftBasicKit'
 

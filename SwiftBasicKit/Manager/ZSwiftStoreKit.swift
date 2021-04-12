@@ -52,7 +52,7 @@ public struct ZSwiftStoreKit {
         SwiftyStoreKit.purchaseProduct(productId, quantity: 1, atomically: true) { result in
             switch result {
             case .success(let purchase):
-                if let model = ZSettingKit.shared.user  {
+                if let model = ZSettingKit.shared.user, diamond > 0 {
                     model.balance += diamond
                     if let dic = model.toDictionary() {
                         ZSettingKit.shared.updateUser(dic: dic)

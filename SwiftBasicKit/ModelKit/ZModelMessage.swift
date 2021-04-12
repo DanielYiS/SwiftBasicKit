@@ -7,21 +7,26 @@ public class ZModelMessage: ZModelBase {
     
     public override class var databaseTableName: String { "tb_message" }
     enum Columns: String, ColumnExpression {
-        case message_userid, login_userid, message_id, message, message_type, message_direction, message_time, message_send_state, message_read_state, message_unread_count, message_file_id, message_file_path, message_can_call_back, message_call_count
+        case message_userid, login_userid, message_id, message, message_type, message_direction, message_time, message_send_state, message_read_state, message_unread_count, message_file_id, message_file_path, message_file_size, message_can_call_back, message_call_count
     }
     public var message_user: ZModelUserBase?
     public var message_user_login: ZModelUserLogin?
     public var message_userid: String = ""
     public var message_id: String = ""
+    public var message_serviceid: Int = 0
+    public var message_issave: Bool = true
+    public var message_json: String = ""
     public var message: String = ""
     public var message_type: zMessageType = .text
     public var message_direction: zMessageDirection = .send
     public var message_time: Double = 0.0
+    /// 0 本地 1 支付未发送 2 支付发送成功
     public var message_send_state: Int = 0
     public var message_read_state: Bool = false
     public var message_unread_count: Int64 = 0
     public var message_file_id: String = ""
     public var message_file_path: String = ""
+    public var message_file_size: Double = 0
     public var message_can_call_back: Bool = false
     public var message_call_count: Int64 = 0
     public var login_userid: String = ZSettingKit.shared.userId
@@ -52,6 +57,7 @@ public class ZModelMessage: ZModelBase {
         self.message_unread_count = model.message_unread_count
         self.message_file_id = model.message_file_id
         self.message_file_path = model.message_file_path
+        self.message_file_size = model.message_file_size
         self.message_can_call_back = model.message_can_call_back
         self.message_call_count = model.message_call_count
     }
@@ -71,6 +77,7 @@ public class ZModelMessage: ZModelBase {
         self.message_unread_count = row[Columns.message_unread_count] ?? 0
         self.message_file_id = row[Columns.message_file_id] ?? ""
         self.message_file_path = row[Columns.message_file_path] ?? ""
+        self.message_file_size = row[Columns.message_file_size] ?? 0
         self.message_can_call_back = row[Columns.message_can_call_back] ?? false
         self.message_call_count = row[Columns.message_call_count] ?? 0
     }
@@ -88,6 +95,7 @@ public class ZModelMessage: ZModelBase {
         container[Columns.message_read_state] = self.message_read_state
         container[Columns.message_file_id] = self.message_file_id
         container[Columns.message_file_path] = self.message_file_path
+        container[Columns.message_file_size] = self.message_file_size
         container[Columns.message_can_call_back] = self.message_can_call_back
         container[Columns.message_call_count] = self.message_call_count
     }

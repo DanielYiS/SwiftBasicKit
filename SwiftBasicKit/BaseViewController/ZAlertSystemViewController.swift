@@ -1,4 +1,5 @@
 import UIKit
+import BFKit
 
 public class ZAlertSystemViewController: UIAlertController {
     
@@ -59,8 +60,32 @@ public class ZAlertSystemViewController: UIAlertController {
         self.view.isUserInteractionEnabled = true
         if ZAlertView.shared.useCustomStyle {
             self.visualEffectView?.effect = UIBlurEffect.init(style: self.attributedContentStyle)
+            self.view.subviews.first?.backgroundColor = self.attributedBackgroundColor
             self.view.subviews.first?.subviews.first?.backgroundColor = self.attributedBackgroundColor
             self.view.subviews.first?.subviews.first?.subviews.first?.backgroundColor = self.attributedBackgroundColor
+            self.setViewBGColorChange(view: self.view)
+        }
+    }
+    private func setViewBGColorChange(view: UIView) {
+        if view.subviews.count > 0 {
+            view.subviews.forEach { (item) in
+                if let classname = NSClassFromString("UIVisualEffectView"), item.isMember(of: classname) {
+                    item.backgroundColor = self.attributedBackgroundColor
+                }
+                if let classname = NSClassFromString("_UIVisualEffectBackdropView"), item.isMember(of: classname) {
+                    item.backgroundColor = self.attributedBackgroundColor
+                }
+                if let classname = NSClassFromString("_UIVisualEffectSubview"), item.isMember(of: classname) {
+                    item.backgroundColor = self.attributedBackgroundColor
+                }
+                if let classname = NSClassFromString("_UIVisualEffectContentView"), item.isMember(of: classname) {
+                    item.backgroundColor = self.attributedBackgroundColor
+                }
+                if item.isMember(of: UILabel.classForCoder()) {
+                    item.backgroundColor = self.attributedBackgroundColor
+                }
+                self.setViewBGColorChange(view: item)
+            }
         }
     }
     public override func addAction(_ action: UIAlertAction) {

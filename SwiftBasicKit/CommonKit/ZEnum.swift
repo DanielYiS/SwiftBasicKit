@@ -77,6 +77,8 @@ public enum zMessageType: Int, HandyJSONEnum, DatabaseValueConvertible {
     case video = 4
     /// 定位
     case location = 5
+    /// 礼物
+    case gift = 6
     /// 系统消息
     case system = 9
 }

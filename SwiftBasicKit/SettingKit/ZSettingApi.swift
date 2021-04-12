@@ -61,9 +61,12 @@ public class ZSettingApi: NSObject {
         if let dic = self.getLoginUser() {
             self.modelUser = ZModelUserLogin.deserialize(from: dic)
             self.modelUser?.rawData = dic
+            BFLog.debug("reload user: \(dic ?? [:])")
+        } else {
+            self.modelUser = nil
+            BFLog.debug("reload user: nil")
         }
         ZKey.shared.token = self.token
-        BFLog.debug("reload user: \(self.modelUser?.toJSONString() ?? "")")
     }
     public final func updatePhotos(array: [String]) {
         if array.count > 0 {
@@ -94,7 +97,7 @@ public class ZSettingApi: NSObject {
             let _ = SSKeychain.setPassword(email, forService: kLastEmailKey, account: kLastEmailKey)
         }
         ZKey.shared.token = self.token
-        BFLog.debug("update user: \(self.modelUser?.toJSONString() ?? "")")
+        BFLog.debug("update user: \(dic ?? [:])")
     }
     public final func logout() {
         self.modelUser = nil

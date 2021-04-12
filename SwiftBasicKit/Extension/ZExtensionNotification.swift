@@ -19,20 +19,14 @@ extension Notification {
         public static let ReceivedEventMessage = Notification.Name.init(rawValue: "ReceivedEventMessage")
         /// 显示用户详情页面
         public static let ShowUserDetailVC = Notification.Name.init(rawValue: "ShowUserDetailVC")
+        /// 显示内购页面
+        public static let ShowRechargeVC = Notification.Name.init(rawValue: "ShowRechargeVC")
         /// 显示聊天页面
         public static let ShowChatMessageVC = Notification.Name.init(rawValue: "ShowChatMessageVC")
-        /// 显示呼叫页面
-        public static let ShowChatCallVC = Notification.Name.init(rawValue: "ShowChatCallVC")
-        /// 显示视频页面
-        public static let ShowChatVideoVC = Notification.Name.init(rawValue: "ShowChatVideoVC")
-        /// 显示充值提醒页面
-        public static let ShowRechargeReminderVC = Notification.Name.init(rawValue: "ShowRechargeReminderVC")
-        /// 声网上传一张图片
-        public static let AgoraUploadImage = Notification.Name.init(rawValue: "AgoraUploadImage")
-        /// 声网上传一个文件
-        public static let AgoraUploadFile = Notification.Name.init(rawValue: "AgoraUploadFile")
-        /// 声网发送一条消息
-        public static let AgoraSendMessage = Notification.Name.init(rawValue: "AgoraSendMessage")
+        /// 显示视频后的对应页面
+        public static let ShowVideoEndVC = Notification.Name.init(rawValue: "ShowVideoEndVC")
+        /// 隐藏呼叫或视频页面
+        public static let DismissCallVideoVC = Notification.Name.init(rawValue: "DismissCallVideoVC")
     }
 }
 extension NotificationCenter {
